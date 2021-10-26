@@ -42,6 +42,13 @@ public class ParserUtil {
             var documentBusVersionElement =  (Element) eElement.getElementsByTagName("businessVersion").item(0);
             var documentFromDateElement =  (Element) eElement.getElementsByTagName("fromDate").item(0);
 
+            String documentApplicationPartElement = eElement.getElementsByTagName("applicationPart").item(0) != null ?
+                    eElement.getElementsByTagName("applicationPart").item(0).getTextContent() : "null";
+
+            String  documentSectionElement =  eElement.getElementsByTagName("section").item(0) != null ?
+                    eElement.getElementsByTagName("section").item(0).getTextContent() : "null";
+
+
             var documentTypeCodeNodeList =  eElement.getElementsByTagName("documentTypeCode");
             var documentTypeCode = (Element)documentTypeCodeNodeList.item(0);
             var displayNameElement = (Element) documentTypeCode.getElementsByTagName("displayName").item(0);
@@ -53,7 +60,9 @@ public class ParserUtil {
                     documentTitleElement.getTextContent(),
                     documentSysVersionElement.getTextContent(),
                     documentBusVersionElement.getTextContent(),
-                    documentFromDateElement.getTextContent()));
+                    documentFromDateElement.getTextContent(),
+                    documentApplicationPartElement,
+                    documentSectionElement));
         }
         return returnList;
     }

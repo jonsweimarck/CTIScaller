@@ -7,7 +7,7 @@ public class DocumentChecker {
 
     public static void main(String[] args) throws Exception {
 
-        var ids = ClinicalTrialIdMap.get(ClinicalTrialIdMap.RBC_Exempel_1);
+        var ids = ClinicalTrialIdMap.get(ClinicalTrialIdMap.MPA_SÖ_211006_1);
 
         var restclient = new RestClient(user, password);
 

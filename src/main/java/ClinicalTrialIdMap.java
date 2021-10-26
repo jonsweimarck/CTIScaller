@@ -19,6 +19,7 @@ public class ClinicalTrialIdMap {
     public static String MPA_ = "MPA_";
     public static String RBC_Exempel_1 = "RBC_Exempel_1";
     public static String RBC_Exempel_2 = "RBC_Exempel_2";
+    public static String RBC_Exempel_3 = "RBC_Exempel_3";
 
 
     public static HashMap<String, ClinicalTrialIds> name2Ids = new HashMap<>();
@@ -41,6 +42,7 @@ public class ClinicalTrialIdMap {
         name2Ids.put(MPA_, new ClinicalTrialIds("MPA_", "2021-501005-20-00", "1347"));
         name2Ids.put(RBC_Exempel_1, new ClinicalTrialIds(RBC_Exempel_1, "2021-501192-91-00", "1800"));
         name2Ids.put(RBC_Exempel_2, new ClinicalTrialIds(RBC_Exempel_2, "2021-501200-18-00", "1809"));
+        name2Ids.put(RBC_Exempel_3, new ClinicalTrialIds(RBC_Exempel_3, "2021-501202-38-00", "1811"));
 
     }
 
