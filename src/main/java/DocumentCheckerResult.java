@@ -1,22 +1,18 @@
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class DocumentCheckerResult {
 
-    private List<DocumentMetaData> documentMetaDatas;
-    private List<Optional<DocumentHttpStatus>> documentHttpStatuses;
+    private List<DocumentHttpStatus> documentHttpStatuses;
 
-    public DocumentCheckerResult(List<DocumentMetaData> documentMetaDatas, List<Optional<DocumentHttpStatus>> documentHttpStatuses) {
-        this.documentMetaDatas = documentMetaDatas;
+    public DocumentCheckerResult(List<DocumentHttpStatus> documentHttpStatuses) {
         this.documentHttpStatuses = documentHttpStatuses;
     }
 
+
     public String getResult() {
         var header = formatLine("documentType", "docId", "documentUrl", "title", "sysVers", "busVers", "appPart", "section", "httpStat");
-        var unsortedMap = documentMetaDatas.stream().collect(Collectors.toMap(metaData -> metaData, metaData -> findHttpStatus(metaData,documentHttpStatuses ) ));
-        var unsortedList = unsortedMap.entrySet().stream()
+        var unsortedList = documentHttpStatuses.stream()
                 .map(entry -> formatResultLine(entry)).toList()
                 .stream().sorted().toList();
         return header + "\n" + unsortedList.stream().collect(Collectors.joining("\n"));
@@ -49,22 +45,19 @@ public class DocumentCheckerResult {
 
     }
 
-    private String formatResultLine(Map.Entry<DocumentMetaData, Optional<DocumentHttpStatus>> entry) {
+    private String formatResultLine(DocumentHttpStatus dhs) {
         return formatLine(
-                entry.getKey().displayName(),
-                entry.getKey().documentId(),
-                entry.getKey().documentUrl(),
-                entry.getKey().title(),
-                entry.getKey().systemVersion(),
-                entry.getKey().businessVersion(),
-                entry.getKey().applicationPart(),
-                entry.getKey().section(),
-                entry.getValue().isPresent() ? String.valueOf(entry.getValue().get().httpStatus().status()) : "***** Kunde inte ansluta *****");
+                dhs.documentMetaData().displayName(),
+                dhs.documentMetaData().documentId(),
+                dhs.documentMetaData().documentUrl(),
+                dhs.documentMetaData().title(),
+                dhs.documentMetaData().systemVersion(),
+                dhs.documentMetaData().businessVersion(),
+                dhs.documentMetaData().applicationPart(),
+                dhs.documentMetaData().section(),
+                dhs.httpStatus() != null ? String.valueOf(dhs.httpStatus().status()) : "***** Kunde inte ansluta *****");
     }
 
-    private Optional<DocumentHttpStatus> findHttpStatus(DocumentMetaData metaData, List<Optional<DocumentHttpStatus>> documentHttpStatuses) {
-        return documentHttpStatuses.stream().filter(dhs-> dhs.isPresent() && dhs.get().documentMetaData().equals(metaData)).findFirst().orElse(Optional.empty());
-    }
 
     private String padwithSpaces(String inputString, int finalLength){
         return String.format("%1$-" + finalLength + "s", inputString);
