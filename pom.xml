@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/pom/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/xmlschema-instance"
-         xsi:schemalocation="http://maven.apache.org/pom/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelversion>4.0.0</modelversion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-    <groupid>bfb</groupid>
-    <artifactid>ctiscaller</artifactid>
+    <groupId>bfb</groupId>
+    <artifactId>ctiscaller</artifactId>
     <version>1.0-snapshot</version>
 
     <properties>
@@ -16,8 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupid>com.mashape.unirest</groupid>
-            <artifactid>unirest-java</artifactid>
+            <groupId>com.mashape.unirest</groupId>
+            <artifactId>unirest-java</artifactId>
             <version>1.4.9</version>
         </dependency>
     </dependencies>
