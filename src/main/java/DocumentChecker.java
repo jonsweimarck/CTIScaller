@@ -7,13 +7,13 @@ public class DocumentChecker {
 
     public static void main(String[] args) throws Exception {
 
-        var ids = ClinicalTrialIdMap.get(ClinicalTrialIdMap.UAT_JW10);
+        var ids = ClinicalTrialIdMap.get(ClinicalTrialIdMap.AUDIT_JW4);
 
         var restclient = new RestClient(user, password);
 
-        var allDocumentsXMLdoc = restclient.getAllDocumentsXML(ids.cliniclaTrialId(), ids.applicationId());
+        var allDocumentsXMLdoc = restclient.getAllPart2DocumentsXML(ids.cliniclaTrialId(), ids.applicationId(), ids.part2Id());
         var documentMetaDatas = ParserUtil.extractDocumentMetaData(allDocumentsXMLdoc);
-        var documentHttpStatuses = restclient.checkDocumentHttpStatus(ids.cliniclaTrialId(), ids.applicationId(), documentMetaDatas);
+        var documentHttpStatuses = restclient.checkPart2DocumentHttpStatus(ids.cliniclaTrialId(), ids.applicationId(), ids.part2Id(), documentMetaDatas);
 
         var result = new DocumentCheckerResult(documentHttpStatuses);
         System.out.println(header(ids));

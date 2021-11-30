@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 
 public class RestClient {
 
-    static final String baseURL = "https://euctis-uat.ema.europa.eu/ct-authority-services/services/v1";
+//    static final String baseURL = "https://euctis-uat.ema.europa.eu/ct-authority-services/services/v1";
+    static final String baseURL = "https://euctis-audit.ema.europa.eu/ct-authority-services/services/v1";
 
     private final String user;
     private final String password;
@@ -32,7 +33,7 @@ public class RestClient {
     }
 
 
-    public Document getAllDocumentsXML(String clinicalTrialId, String applicationId) throws UnirestException, ParserConfigurationException, IOException, SAXException {
+    public Document getAllPart1DocumentsXML(String clinicalTrialId, String applicationId) throws UnirestException, ParserConfigurationException, IOException, SAXException {
 
         var allDocumentsURL = baseURL + "/clinicalTrials/" + clinicalTrialId + "/applications/" + applicationId + "/part1/documents?pagesize=30";
         var response = Unirest.get(allDocumentsURL).basicAuth(user, password).asString();
@@ -40,14 +41,38 @@ public class RestClient {
         return ParserUtil.xmlToDocument(response.getBody());
     }
 
+    public Document getAllPart2DocumentsXML(String clinicalTrialId, String applicationId, String part2Id) throws UnirestException, ParserConfigurationException, IOException, SAXException {
 
-    public List<DocumentHttpStatus> checkDocumentHttpStatus(String clinicalTrialId, String applicationId, List<DocumentMetaData> documentMetaDatas) {
-        return documentMetaDatas.stream().map(documentMetaData -> checkSingleDocumentHttpStatus(clinicalTrialId, applicationId, documentMetaData)).collect(Collectors.toList());
+//        var allDocumentsURL = baseURL + "/clinicalTrials/" + clinicalTrialId + "/applications/" + applicationId + "/part1/documents?pagesize=30";
+        var allDocumentsURL = baseURL + "/clinicalTrials/" + clinicalTrialId + "/applications/" + applicationId + "/parts2/" + part2Id + "/documents?pagesize=30";
+        var response = Unirest.get(allDocumentsURL).basicAuth(user, password).asString();
+
+        return ParserUtil.xmlToDocument(response.getBody());
     }
 
-    private DocumentHttpStatus checkSingleDocumentHttpStatus(String clinicalTrialId, String applicationId, DocumentMetaData documentMetaData) {
+
+    public List<DocumentHttpStatus> checkPart1DocumentHttpStatus(String clinicalTrialId, String applicationId, List<DocumentMetaData> documentMetaDatas) {
+        return documentMetaDatas.stream().map(documentMetaData -> checkSinglePart1DocumentHttpStatus(clinicalTrialId, applicationId, documentMetaData)).collect(Collectors.toList());
+    }
+
+    private DocumentHttpStatus checkSinglePart1DocumentHttpStatus(String clinicalTrialId, String applicationId, DocumentMetaData documentMetaData) {
         try {
             var singleDocumentURL = baseURL + "/clinicalTrials/" + clinicalTrialId + "/applications/" + applicationId + "/part1/documents/" + documentMetaData.documentUrl();
+            var response = Unirest.get(singleDocumentURL).basicAuth(user, password).asString();
+            return new DocumentHttpStatus(documentMetaData, new HttpStatus(response.getStatus(), response.getStatusText()));
+        } catch (UnirestException e) {
+            e.printStackTrace();
+            return new DocumentHttpStatus(documentMetaData, null);
+        }
+    }
+
+    public List<DocumentHttpStatus> checkPart2DocumentHttpStatus(String clinicalTrialId, String applicationId, String part2Id, List<DocumentMetaData> documentMetaDatas) {
+        return documentMetaDatas.stream().map(documentMetaData -> checkSinglePart2DocumentHttpStatus(clinicalTrialId, applicationId, part2Id, documentMetaData)).collect(Collectors.toList());
+    }
+
+    private DocumentHttpStatus checkSinglePart2DocumentHttpStatus(String clinicalTrialId, String applicationId, String part2Id, DocumentMetaData documentMetaData) {
+        try {
+            var singleDocumentURL = baseURL + "/clinicalTrials/" + clinicalTrialId + "/applications/" + applicationId + "/parts2/"+ part2Id + "/documents/" + documentMetaData.documentUrl();
             var response = Unirest.get(singleDocumentURL).basicAuth(user, password).asString();
             return new DocumentHttpStatus(documentMetaData, new HttpStatus(response.getStatus(), response.getStatusText()));
         } catch (UnirestException e) {
